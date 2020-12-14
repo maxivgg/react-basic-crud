@@ -3,21 +3,48 @@ import PropTypes from "prop-types";
 
 export class AddBoiler extends Component {
   state = {
+    id: "",
     typeId: "",
     maintainceRate: "",
     hourMaintainceCost: "",
     hourEventualCost: "",
   };
 
+  componentDidUpdate(prevProps, prevState) {
+    if (this.props.boilerEdit !== prevProps.boilerEdit) {
+      this.handleEdit(this.props.boilerEdit);
+    }
+  }
+
+  handleEdit = (boilerEdit) => {
+    this.setState({
+      id: boilerEdit.id,
+      typeId: boilerEdit.typeId,
+      maintainceRate: boilerEdit.maintainceRate,
+      hourMaintainceCost: boilerEdit.hourMaintainceCost,
+      hourEventualCost: boilerEdit.hourEventualCost,
+    });
+  };
   onSubmit = (e) => {
     e.preventDefault();
-    this.props.addBoiler(
-      this.state.typeId,
-      this.state.maintainceRate,
-      this.state.hourMaintainceCost,
-      this.state.hourEventualCost
-    );
+    if (this.state.id) {
+      this.props.updateBoiler(
+        this.state.id,
+        this.state.typeId,
+        this.state.maintainceRate,
+        this.state.hourMaintainceCost,
+        this.state.hourEventualCost
+      );
+    } else {
+      this.props.addBoiler(
+        this.state.typeId,
+        this.state.maintainceRate,
+        this.state.hourMaintainceCost,
+        this.state.hourEventualCost
+      );
+    }
     this.setState({
+      id: "",
       typeId: "",
       maintainceRate: "",
       hourMaintainceCost: "",
@@ -30,8 +57,9 @@ export class AddBoiler extends Component {
   render() {
     return (
       <div>
-        <h3>Add new boiler</h3>
+        <h3>{this.state.id ? "Edit boiler" : "Add new boiler"}</h3>
         <form onSubmit={this.onSubmit}>
+          <input type="hidden" name="id" value={this.state.id} />
           <input
             type="text"
             name="typeId"
@@ -65,11 +93,7 @@ export class AddBoiler extends Component {
             onChange={this.onChange}
           />
 
-          <input
-            type="submit"
-            value="Submit"
-            style={inputStyle}
-          />
+          <input type="submit" value="Submit" style={inputStyle} />
         </form>
       </div>
     );
@@ -79,6 +103,8 @@ export class AddBoiler extends Component {
 // PropTypes
 AddBoiler.propTypes = {
   addBoiler: PropTypes.func.isRequired,
+  updateBoiler: PropTypes.func.isRequired,
+  boilerEdit: PropTypes.object,
 };
 
 const inputStyle = {

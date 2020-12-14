@@ -11,15 +11,28 @@ export class BoilerItem extends Component {
   };
 
   render() {
-    const { id, maintainceRate, typeId, hourMaintainceCost, hourEventualCost } = this.props.boiler;
+    const {
+      id,
+      maintainceRate,
+      typeId,
+      hourMaintainceCost,
+      hourEventualCost,
+    } = this.props.boiler;
     return (
       <div style={this.getStyle()}>
         <p>
-          Nro {id} - Type {typeId} - Maintaince {maintainceRate} - Maintaince Cost {hourMaintainceCost} - Eventual Cost {hourEventualCost}
-          <button onClick={this.props.delBoiler.bind(this, id)} style={btnStyle}>
+          Nro {id} - Type {typeId} - Maintaince {maintainceRate} - Maintaince
+          Cost {hourMaintainceCost} - Eventual Cost {hourEventualCost}
+          <button
+            onClick={this.props.delBoiler.bind(this, id)}
+            style={btnStyle}
+          >
             delete
           </button>
-          <button style={btnStyle}>
+          <button
+            onClick={this.props.editBoiler.bind(this, this.props.boiler)}
+            style={btnStyle}
+          >
             edit
           </button>
         </p>

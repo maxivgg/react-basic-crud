@@ -8,7 +8,11 @@ class Boilers extends Component {
       <div>
         <h1>Boilers</h1>
         {this.props.boilers.map((boiler) => (
-          <BoilerItem key={boiler.id} boiler={boiler} delBoiler={this.props.delBoiler} />
+          <BoilerItem
+          key={boiler.id}
+          boiler={boiler}
+          editBoiler={this.props.editBoiler}
+          delBoiler={this.props.delBoiler} />
 
         ))}
       </div>
@@ -20,6 +24,7 @@ class Boilers extends Component {
 Boilers.propTypes = {
   boilers: PropTypes.array.isRequired,
   delBoiler: PropTypes.func.isRequired,
+  editBoiler: PropTypes.func.isRequired,
 };
 
 export default Boilers;
