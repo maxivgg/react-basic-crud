@@ -1,101 +1,86 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router, Route } from "react-router-dom";
-import Boilers from "./components/Boilers";
-import AddBoiler from "./components/AddBoiler";
+import Users from "./components/Users";
+import AddUser from "./components/AddUser";
 import { v4 as uuidv4 } from "uuid";
 import "./App.css";
 
 class App extends Component {
   state = {
-    boilers: [],
-    boilerEdit: null,
+    users: [],
+    userEdit: null,
+    showForm: false,
   };
 
   componentDidMount() {
-    const dataBoilers = require("./data/boilers.json");
-    this.setState({ boilers: dataBoilers });
+    const data = require("./data/MOCK_DATA.json");
+    this.setState({ users: data });
   }
 
-  // Edit Boiler
-  editBoiler = (boiler) => {
+  handleShowForm = (showForm) => {
     this.setState({
-      boilerEdit: boiler,
+      showForm: showForm,
+      userEdit: null,
     });
     window.scrollTo(0, 0);
   };
 
-  // Update Boiler
-  updateBoiler = (
-    id,
-    typeId,
-    maintainceRate,
-    hourMaintainceCost,
-    hourEventualCost
-  ) => {
+  editUser = (user) => {
     this.setState({
-      boilers: this.state.boilers.map((boiler) => {
-        if (boiler.id === id) {
-          boiler.typeId = typeId;
-          boiler.maintainceRate = maintainceRate;
-          boiler.hourMaintainceCost = hourMaintainceCost;
-          boiler.hourEventualCost = hourEventualCost;
+      userEdit: user,
+      showForm: true,
+    });
+    window.scrollTo(0, 0);
+  };
+
+  updateUser = (id, first_name, last_name, email) => {
+    this.setState({
+      users: this.state.users.map((user) => {
+        if (user.id === id) {
+          user.first_name = first_name;
+          user.last_name = last_name;
+          user.email = email;
         }
-        return boiler;
+        return user;
       }),
     });
   };
 
-  // Delete Boiler
-  delBoiler = (id) => {
+  delUser = (id) => {
     this.setState({
-      boilers: [...this.state.boilers.filter((boiler) => boiler.id !== id)],
+      users: [...this.state.users.filter((user) => user.id !== id)],
     });
   };
 
-  // Add Boiler
-  addBoiler = (
-    typeId,
-    maintainceRate,
-    hourMaintainceCost,
-    hourEventualCost
-  ) => {
-    const newBoiler = {
+  addUser = (first_name, last_name, email) => {
+    const newUser = {
       id: uuidv4(),
-      typeId,
-      maintainceRate,
-      hourMaintainceCost,
-      hourEventualCost,
+      first_name,
+      last_name,
+      email,
     };
 
-    this.setState({ boilers: [...this.state.boilers, newBoiler] });
+    this.setState({ users: [...this.state.users, newUser] });
   };
 
   render() {
     return (
-      <Router>
-        <div className="App">
-          <div className="container">
-            <Route
-              exact
-              path="/"
-              render={(props) => (
-                <React.Fragment>
-                  <AddBoiler
-                    addBoiler={this.addBoiler}
-                    updateBoiler={this.updateBoiler}
-                    boilerEdit={this.state.boilerEdit}
-                  />
-                  <Boilers
-                    boilers={this.state.boilers}
-                    delBoiler={this.delBoiler}
-                    editBoiler={this.editBoiler}
-                  />
-                </React.Fragment>
-              )}
-            />
-          </div>
-        </div>
-      </Router>
+      <div className="App">
+        {this.state.showForm ? (
+          <AddUser
+            addUser={this.addUser}
+            updateUser={this.updateUser}
+            userEdit={this.state.userEdit}
+            handleShowForm={this.handleShowForm}
+          />
+        ) : (
+          <Users
+            users={this.state.users}
+            delUser={this.delUser}
+            editUser={this.editUser}
+            handleShowForm={this.handleShowForm}
+          />
+        )}
+      </div>
     );
   }
 }
